@@ -34,15 +34,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -53,32 +44,82 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      
-      body:
-        Column(
-          children: <Widget>[
-            Image.asset('assets/login.png'),
-            Expanded(
-              child: Align(
-                alignment: Alignment(-0.7, -2.3),
-                child: Image.asset('assets/logo.png', width: 160, height: 160),
+      resizeToAvoidBottomInset: false, // evita error de overflow
+      body: Column(
+        children: <Widget>[
+          Image.asset('assets/login.png'),
+          Expanded(
+            child: Align(
+              alignment: Alignment(-0.7, -2.6),
+              child: Image.asset('assets/logo.png', width: 175, height: 175),
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment(-0.7, -0.1),
+              child: Text(
+                'Inicio de sesión',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            ElevatedButton(onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (_) => SwipeScreen()));}, 
-            child: Text('Navigate'),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: Align(
+                alignment: Alignment(-0.9, -3), // más arriba y a la izquierda
+                child: SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Correo Electrónico',
+                      filled: true,
+                      fillColor: Color(0xFFF2ECF2),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          Icons.arrow_circle_right_outlined,
+                          color: Color(0xFFC8102E),
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => SwipeScreen()),
+                          );
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment(-0.75, -1),
+              child: Text(
+                'Quiero Registrarme!',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,
+                color: Colors.red, // 👈 color rojo
+                decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
+
+
 
 class SwipeScreen extends StatelessWidget {
   @override

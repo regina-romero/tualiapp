@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'api_service.dart';
 import 'dart:async';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -127,9 +128,11 @@ class SwipeScreen extends StatefulWidget {
 
 class _SwipeScreenState extends State<SwipeScreen> {
   Offset position = Offset(150, 300);
+  Offset? _startPosition;
+  DateTime? _startTime;
+
   Timer? _timer;
   int _seconds = 0;
-  bool _isDragging = false;
 
   void _startTimer() {
     _timer?.cancel();
@@ -138,7 +141,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
       _seconds++;
       if (_seconds >= 5) {
         _timer?.cancel();
-        _showSuccessDialog();
+        _handleSwipeComplete();
       }
     });
   }
@@ -148,20 +151,30 @@ class _SwipeScreenState extends State<SwipeScreen> {
     _seconds = 0;
   }
 
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Éxito'),
-        content: Text('¡Arrastraste por 5 segundos!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
+  void _handleSwipeComplete() {
+    if (_startTime != null && _startPosition != null) {
+      final duration = DateTime.now().difference(_startTime!).inMilliseconds / 1000.0;
+      final delta = position - _startPosition!;
+      final distance = delta.distance;
+      final speed = distance / duration; // px/sec
+      final angle = atan2(delta.dy, delta.dx) * (180 / pi); // in degrees
+
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text("¡Éxito!"),
+          content: Text(
+            "Tiempo: ${duration.toStringAsFixed(2)} s\n"
+            "Distancia: ${distance.toStringAsFixed(1)} px\n"
+            "Velocidad: ${speed.toStringAsFixed(2)} px/s\n"
+            "Ángulo: ${angle.toStringAsFixed(1)}°",
           ),
-        ],
-      ),
-    );
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: Text("OK")),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -203,16 +216,11 @@ class _SwipeScreenState extends State<SwipeScreen> {
               ),
 
               SizedBox(height: 24),
-
               Text(
                 "Arrastra el objeto durante\n5 segundos",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-
               SizedBox(height: 24),
 
               Padding(
@@ -222,13 +230,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      )
-                    ],
+                    boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
                   ),
                   child: Stack(
                     children: [
@@ -236,8 +238,9 @@ class _SwipeScreenState extends State<SwipeScreen> {
                         left: position.dx,
                         top: position.dy,
                         child: GestureDetector(
-                          onPanStart: (_) {
-                            _isDragging = true;
+                          onPanStart: (details) {
+                            _startTime = DateTime.now();
+                            _startPosition = position;
                             _startTimer();
                           },
                           onPanUpdate: (details) {
@@ -246,7 +249,6 @@ class _SwipeScreenState extends State<SwipeScreen> {
                             });
                           },
                           onPanEnd: (_) {
-                            _isDragging = false;
                             _resetTimer();
                           },
                           child: Container(
@@ -265,11 +267,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
               ),
 
               SizedBox(height: 30),
-
-              Text(
-                "¿Teniendo Problemas?",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text("¿Teniendo Problemas?", style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 6),
               GestureDetector(
                 onTap: () {},
@@ -286,9 +284,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 20),
-
               TextButton(
                 onPressed: () {},
                 child: Text(
@@ -299,7 +295,6 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 10),
             ],
           ),

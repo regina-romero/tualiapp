@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Align(
-                alignment: Alignment(-0.9, -3), // más arriba y a la izquierda
+                alignment: Alignment(-0.9, -3), 
                 child: SizedBox(
                   width: double.infinity,
                   child: TextField(
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(
                 'Quiero Registrarme!',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,
-                color: Colors.red, // 👈 color rojo
+                color: Colors.red, 
                 decoration: TextDecoration.underline,
                 ),
               ),

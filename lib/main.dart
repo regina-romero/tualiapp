@@ -120,8 +120,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-class SwipeScreen extends StatelessWidget {
-=======
 class SwipeScreen extends StatefulWidget {
   @override
   _SwipeScreenState createState() => _SwipeScreenState();

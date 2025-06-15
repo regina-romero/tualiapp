@@ -4,10 +4,12 @@ void main() {
   runApp(const MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+ // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,12 +17,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
         //
         // Notice that the counter didn't reset back to zero; the application
         // state is not lost during the reload. To reset the state, use hot
@@ -104,6 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ElevatedButton(onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (_) => SwipeScreen()));}, 
+            child: Text('Navigate'),
+            ),
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
@@ -120,3 +119,50 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class SwipeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Swipe Screen')),
+      body: Center(
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => InicioScreen()));
+          },
+          child: Text('Navigate'),
+  ),
+),
+
+    );
+  }
+}
+
+class InicioScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Inicio Screen')),
+      body: Center(
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => CarritoScreen()));
+          },
+          child: Text('Navigate'),
+  ),
+),
+
+    );
+  }
+}
+
+class CarritoScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Carrito Screen')),
+
+    );
+  }
+}
+

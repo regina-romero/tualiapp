@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+//import 'api_service.dart';
+import 'dart:async';
 
 void main() {
   runApp(const MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -80,23 +80,194 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class SwipeScreen extends StatelessWidget {
+class SwipeScreen extends StatefulWidget {
+  @override
+  _SwipeScreenState createState() => _SwipeScreenState();
+}
+
+class _SwipeScreenState extends State<SwipeScreen> {
+  Offset position = Offset(150, 300);
+  Timer? _timer;
+  int _seconds = 0;
+  bool _isDragging = false;
+
+  void _startTimer() {
+    _timer?.cancel();
+    _seconds = 0;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _seconds++;
+      if (_seconds >= 5) {
+        _timer?.cancel();
+        _showSuccessDialog();
+      }
+    });
+  }
+
+  void _resetTimer() {
+    _timer?.cancel();
+    _seconds = 0;
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Éxito'),
+        content: Text('¡Arrastraste por 5 segundos!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Swipe Screen')),
-      body: Center(
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => InicioScreen()));
-          },
-          child: Text('Navigate'),
-  ),
-),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // AppBar
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back, color: Colors.red),
+                    SizedBox(width: 10),
+                    Text(
+                      "Regresar",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
+              SizedBox(height: 24),
+
+              Text(
+                "Arrastra el objeto durante\n5 segundos",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(height: 24),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Container(
+                  height: 400,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: position.dx,
+                        top: position.dy,
+                        child: GestureDetector(
+                          onPanStart: (_) {
+                            _isDragging = true;
+                            _startTimer();
+                          },
+                          onPanUpdate: (details) {
+                            setState(() {
+                              position += details.delta;
+                            });
+                          },
+                          onPanEnd: (_) {
+                            _isDragging = false;
+                            _resetTimer();
+                          },
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.red[700],
+                              border: Border.all(color: Colors.red[900]!, width: 2),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              Text(
+                "¿Teniendo Problemas?",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 6),
+              GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Haz click aquí para recibir tu acceso por\ncorreo electrónico",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Términos de Privacidad",
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
+
 
 class InicioScreen extends StatelessWidget {
   @override

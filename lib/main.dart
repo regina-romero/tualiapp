@@ -119,9 +119,66 @@ class InicioScreen extends StatelessWidget {
 class CarritoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Carrito Screen')),
-
+    return Scaffold(  //Allows to build screen with the UI elements, kinda like a div
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: const Text(
+          'Carrito', 
+          style: TextStyle(
+            fontWeight: FontWeight.bold, 
+            fontSize: 28,
+          ),
+          ),
+          toolbarHeight: 80,
+      ),
+body: Container(
+  decoration: BoxDecoration(
+    color: const Color.fromARGB(255, 209, 204, 204),
+  ),
+  child: Stack(
+    children: [
+      Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          alignment: Alignment.topRight,
+          margin: const EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
+          height: 250,
+          width: 1500,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 255, 255, 255),
+          ),
+          child: const Text('Fuze Tea de frutos rojos,Botella Pet 600 mL, 6 piezas'),
+        ),
+      ),
+    ],
+  ),
+),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag_outlined), 
+            label: 'Productos'
+            ), 
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star_border_outlined), 
+            label: 'Gana'
+            ), 
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined), 
+            label: 'Inicio'
+            ), 
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark_border), 
+            label: 'Pedidios'
+            ), 
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu), 
+            label: 'Menu'
+            ), 
+          ], 
+    ),
     );
   }
 }
